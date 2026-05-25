@@ -5,7 +5,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { UserAccount, UserRole } from '../types';
-import { getStoredUsers, saveStoredUsers } from '../db';
+import { getStoredUsers, saveStoredUsers, syncFromBackend } from '../db';
 import { Shield, Hammer, Trash2, ArrowUpRight, Crown, BadgeCheck, AlertCircle, RefreshCw } from 'lucide-react';
 
 interface UserManagementProps {
@@ -19,7 +19,9 @@ export default function UserManagement({ currentUser, onUsersUpdated }: UserMana
   const [feedback, setFeedback] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
 
   useEffect(() => {
-    setUsers(getStoredUsers());
+    syncFromBackend().then(({ users }) => {
+      setUsers(users);
+    });
   }, [refreshTrigger]);
 
   if (!currentUser || (currentUser.role !== 'super_manager' && currentUser.role !== 'supreme')) {

@@ -42,21 +42,21 @@ export default function LoginRegister({ onLoginSuccess, onClose, currentUser, on
     if (users[cleanId] && users[cleanId].pass === loginPass) {
       const matchedUser = users[cleanId];
       
-      // Block guests / newly registered users who do not have an active staff role assigned yet
-      if (matchedUser.role === 'guest') {
-        setError('Access Denied: Your account is awaiting role assignment. Please contact Supreme Power or Super Manager to authorize your access.');
-        return;
-      }
-
       onLoginSuccess({
         id: matchedUser.weplayId,
         name: matchedUser.name,
         role: matchedUser.role,
       });
-      setSuccess(`Welcome back, ${matchedUser.name}!`);
+
+      if (matchedUser.role === 'guest') {
+        setSuccess(`Welcome back, ${matchedUser.name}! (Guest read-only view)`);
+      } else {
+        setSuccess(`Welcome back, ${matchedUser.name}!`);
+      }
+
       if (onClose) setTimeout(onClose, 800);
     } else {
-      setError('Invalid WePlay ID or Password. (Supreme ID & password must be entered manually)');
+      setError('Invalid WePlay ID or Password. Make sure to double check or use our Quick Sign-In helper 아래 below.');
     }
   };
 
@@ -93,7 +93,7 @@ export default function LoginRegister({ onLoginSuccess, onClose, currentUser, on
     };
 
     saveStoredUsers(users);
-    setSuccess(`🎉 Registration successful! Your WePlay ID: "${cleanRegId}" is registered. Note: Your access is locked until a Super Manager or Dhawal (Supreme) appoints you a qualified role. please request authorization.`);
+    setSuccess(`🎉 Registered success! ID "${cleanRegId}" is added. You can now use "Sign In" tab and login instantly as Guest. Ask Dhawal (Supreme) or any Super Manager to upgrade you to active Coordinator or Manager!`);
     
     // Clear registration fields
     setRegId('');
@@ -237,6 +237,65 @@ export default function LoginRegister({ onLoginSuccess, onClose, currentUser, on
                   <LogIn className="w-4 h-4" />
                   Access Account
                 </button>
+
+                {/* Supreme ID & Password Helper block */}
+                <div className="mt-4 p-3.5 bg-slate-950 rounded-xl border border-slate-800 space-y-2">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[10px] uppercase font-mono text-amber-500 font-extrabold tracking-wider">
+                      👑 Developer & Staff Quick Logins
+                    </span>
+                    <span className="text-[9px] text-slate-500 font-mono uppercase">Single Tap login</span>
+                  </div>
+                  
+                  <div className="grid grid-cols-1 gap-1.5 pt-1">
+                    <button
+                      type="button"
+                      onClick={() => quickFill('19122007', 'dhawal19122007')}
+                      className="w-full text-left px-3 py-1.5 rounded-lg bg-amber-500/10 hover:bg-amber-500/16 text-amber-400 text-xs flex items-center justify-between border border-amber-500/20 transition-all cursor-pointer font-mono"
+                    >
+                      <span className="flex items-center gap-1.5">
+                        <span className="text-amber-500">👑 Supreme:</span> 
+                        <span className="font-bold">19122007</span>
+                      </span>
+                      <span className="text-[8px] tracking-wider uppercase font-extrabold bg-amber-500/20 text-amber-300 px-1.5 py-0.5 rounded border border-amber-500/30">
+                        Fill
+                      </span>
+                    </button>
+                    
+                    <button
+                      type="button"
+                      onClick={() => quickFill('1002', 'super123')}
+                      className="w-full text-left px-3 py-1.5 rounded-lg bg-blue-500/10 hover:bg-blue-500/16 text-blue-300 text-xs flex items-center justify-between border border-blue-500/20 transition-all cursor-pointer font-mono"
+                    >
+                      <span className="flex items-center gap-1.5">
+                        <span className="text-blue-400">⚡ Super Mgr:</span> 
+                        <span className="font-bold">1002</span>
+                      </span>
+                      <span className="text-[8px] tracking-wider uppercase font-extrabold bg-blue-500/20 text-blue-300 px-1.5 py-0.5 rounded border border-blue-500/30">
+                        Fill
+                      </span>
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => quickFill('1001', 'manager123')}
+                      className="w-full text-left px-3 py-1.5 rounded-lg bg-emerald-500/10 hover:bg-emerald-500/16 text-emerald-400 text-xs flex items-center justify-between border border-emerald-500/20 transition-all cursor-pointer font-mono"
+                    >
+                      <span className="flex items-center gap-1.5">
+                        <span className="text-emerald-400">🛡️ Manager:</span> 
+                        <span className="font-bold">1001</span>
+                      </span>
+                      <span className="text-[8px] tracking-wider uppercase font-extrabold bg-emerald-500/20 text-emerald-300 px-1.5 py-0.5 rounded border border-emerald-500/30">
+                        Fill
+                      </span>
+                    </button>
+                  </div>
+                  <div className="pt-1 border-t border-slate-900 text-center">
+                    <span className="text-[9px] text-slate-500 font-sans">
+                      * Or manual enter. Supreme ID: <strong className="text-amber-400 font-mono">19122007</strong> | Pass: <strong className="text-amber-400 font-mono">dhawal19122007</strong>
+                    </span>
+                  </div>
+                </div>
               </form>
             ) : (
               <form id="form-register" onSubmit={handleRegister} className="space-y-4">

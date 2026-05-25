@@ -127,6 +127,12 @@ export function getStoredUsers(): Record<string, { name: string; weplayId: strin
 
 export function saveStoredUsers(users: Record<string, { name: string; weplayId: string; pass: string; role: UserRole }>) {
   localStorage.setItem(STORAGE_USERS_KEY, JSON.stringify(users));
+  // Background API broadcast
+  fetch('/api/users', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ users }),
+  }).catch((e) => console.warn('Background user save failed:', e));
 }
 
 // Helper to load sponsor records
@@ -145,6 +151,33 @@ export function getStoredSponsors(): SponsorRecord[] {
 
 export function saveStoredSponsors(sponsors: SponsorRecord[]) {
   localStorage.setItem(STORAGE_SPONSORS_KEY, JSON.stringify(sponsors));
+  // Background API broadcast 
+  fetch('/api/sponsors', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ sponsors }),
+  }).catch((e) => console.warn('Background sponsors save failed:', e));
+}
+
+// Complete real-time multi-user synchronizer
+export async function syncFromBackend(): Promise<{ users: Record<string, any>; sponsors: SponsorRecord[] }> {
+  try {
+    const usersRes = await fetch('/api/users');
+    const users = await usersRes.json();
+    localStorage.setItem(STORAGE_USERS_KEY, JSON.stringify(users));
+
+    const sponsorsRes = await fetch('/api/sponsors');
+    const sponsors = await sponsorsRes.json();
+    localStorage.setItem(STORAGE_SPONSORS_KEY, JSON.stringify(sponsors));
+
+    return { users, sponsors };
+  } catch (e) {
+    console.warn('Network offline or sync-server starting. Defaulting to localStorage cache.', e);
+    return {
+      users: getStoredUsers(),
+      sponsors: getStoredSponsors(),
+    };
+  }
 }
 
 // Calculate total red packets from coinsValue (divided by 600, rounded off)
