@@ -1,0 +1,6 @@
+{
+  "name": "Sponsor and Red Packet Tracker",
+  "description": "A high-performance responsive tracker for WePlay sponsor invitations, total red packets, given amounts, and coin-to-gold conversions.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
