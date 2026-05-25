@@ -175,6 +175,16 @@ export default function App() {
       {/* Primary Dashboard Container */}
       <main className="flex-1 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-8 space-y-8 z-10">
         
+        {/* Real-time Access Approval Queue on the very top of the page */}
+        {(currentUser?.role === 'supreme' || currentUser?.role === 'super_manager') && (
+          <UserManagement 
+            currentUser={currentUser} 
+            onUsersUpdated={handleUserApprovalReset} 
+            viewMode="pending"
+            resetKey={resetKey}
+          />
+        )}
+        
         {/* Dynamic Formula Info Header Card */}
         <div className="p-4 rounded-xl bg-blue-50 border border-blue-200 flex flex-col sm:flex-row items-center font-sans gap-4 shadow-sm">
           <div className="w-12 h-12 rounded-lg bg-white border border-blue-300 flex items-center justify-center shrink-0 shadow-sm">
@@ -297,7 +307,12 @@ export default function App() {
           {/* User authorizations and promotion management panel */}
           {(currentUser?.role === 'supreme' || currentUser?.role === 'super_manager') && (
             <div className="xl:col-span-3">
-              <UserManagement currentUser={currentUser} onUsersUpdated={handleUserApprovalReset} />
+              <UserManagement 
+                currentUser={currentUser} 
+                onUsersUpdated={handleUserApprovalReset} 
+                viewMode="staff"
+                resetKey={resetKey}
+              />
             </div>
           )}
 
