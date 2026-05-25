@@ -175,33 +175,6 @@ export default function App() {
       {/* Primary Dashboard Container */}
       <main className="flex-1 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-8 space-y-8 z-10">
         
-        {/* Guest Warning Banner */}
-        {currentUser?.role === 'guest' && (
-          <div className="p-4 rounded-xl bg-amber-50 border border-amber-200 flex flex-col sm:flex-row items-center font-sans gap-4 shadow-sm animate-pulse">
-            <div className="w-12 h-12 rounded-lg bg-amber-100 border border-amber-200 flex items-center justify-center shrink-0 shadow-sm text-lg">
-              👤
-            </div>
-            <div className="space-y-0.5 text-center sm:text-left">
-              <h4 className="text-sm font-bold text-amber-900 font-display flex items-center gap-2 justify-center sm:justify-start">
-                🔒 Pending Authorization from Supreme Dhawal
-              </h4>
-              <p className="text-xs text-amber-700 max-w-3xl leading-relaxed">
-                Welcome, <b className="text-amber-950">{currentUser.name}</b>! Your profile is successfully registered. You currently have <b>Guest (Read-Only)</b> privileges. Dhawal (Supreme) or any Super Manager can promote you in the Staff permissions panel.
-              </p>
-            </div>
-            <button
-              onClick={() => {
-                setResetKey(prev => prev + 1);
-                syncFromBackend();
-              }}
-              className="sm:ml-auto w-full sm:w-auto shrink-0 bg-amber-600 hover:bg-amber-700 text-white px-3.5 py-1.5 rounded-lg border border-amber-600 text-xs font-semibold cursor-pointer transition-all shadow-sm flex items-center justify-center gap-1.5 hover:scale-[1.02]"
-            >
-              <RefreshCw className="w-3.5 h-3.5" />
-              Check Role Upgrade
-            </button>
-          </div>
-        )}
-
         {/* Dynamic Formula Info Header Card */}
         <div className="p-4 rounded-xl bg-blue-50 border border-blue-200 flex flex-col sm:flex-row items-center font-sans gap-4 shadow-sm">
           <div className="w-12 h-12 rounded-lg bg-white border border-blue-300 flex items-center justify-center shrink-0 shadow-sm">
